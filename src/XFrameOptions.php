@@ -41,7 +41,7 @@ class XFrameOptions
             return $response = $next($request, $response);
         }
 
-        $response->withAddedHeader(self::X_FRAME_OPTIONS, $this->getXFrameOption());
+        $response = $response->withAddedHeader(self::X_FRAME_OPTIONS, $this->getXFrameOption());
         return $response = $next($request, $response);
     }
 
