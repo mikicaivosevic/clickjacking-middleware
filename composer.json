@@ -1,0 +1,22 @@
+{
+    "name": "mikica/clickjacking-middleware",
+    "description": "Provides clickjacking protection via the X-Frame-Options header.",
+    "type": "library",
+    "keywords": ["clickjacking", "x-frame-options", "middleware"],
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Mikica Ivosevic",
+            "email": "mikica.ivosevic@gmail.com"
+        }
+    ],
+    "require": {
+      "php": ">=5.3",
+      "psr/http-message": "^1.0"
+    },
+    "autoload": {
+      "psr-4": {
+        "Clickjacking\\Middleware\\": "src"
+      }
+    }
+}
