@@ -15,6 +15,7 @@ Note: older browsers will quietly ignore this header, thus other clickjacking pr
 In Slim 3:
 
 ```php
+//new Clickjacking\Middleware\XFrameOptions("DENY")
 $app->add(new Clickjacking\Middleware\XFrameOptions());
 
 $app->get('/', function ($request, $response, $args) {
