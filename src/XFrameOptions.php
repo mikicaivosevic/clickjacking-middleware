@@ -37,12 +37,13 @@ class XFrameOptions
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $next)
     {
+        $response = $next($request, $response);
+
         if ($response->hasHeader(self::X_FRAME_OPTIONS)) {
-            return $response = $next($request, $response);
+            return $response;
         }
 
-        $response = $response->withAddedHeader(self::X_FRAME_OPTIONS, $this->getXFrameOption());
-        return $response = $next($request, $response);
+        return $response->withAddedHeader(self::X_FRAME_OPTIONS, $this->getXFrameOption());
     }
 
 

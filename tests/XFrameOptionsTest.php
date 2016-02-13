@@ -17,7 +17,7 @@ class XFrameOptionsTest extends \PHPUnit_Framework_TestCase
     public function testWithPassedParamToConstructor()
     {
         $xFrameOption = new XFrameOptions(XFrameOptions::DENY);
-        $this->assertEquals(XFrameOptions::DENY, $xFrameOption->getXFrameOption());
+        $this->assertSame(XFrameOptions::DENY, $xFrameOption->getXFrameOption());
     }
 
     public function testMiddlewareFunctionalityWithoutXframeOptionsHeader()
@@ -27,11 +27,11 @@ class XFrameOptionsTest extends \PHPUnit_Framework_TestCase
         $response = new Response();
 
         /** @var Response $response */
-        $response = $middleware($request, $response, function($request, $response){
+        $response = $middleware($request, $response, function ($request, $response) {
             return $response;
         });
 
-        $this->assertEquals($response->getHeader(XFrameOptions::X_FRAME_OPTIONS)[0], XFrameOptions::SAMEORIGIN);
+        $this->assertSame([XFrameOptions::SAMEORIGIN], $response->getHeader(XFrameOptions::X_FRAME_OPTIONS));
     }
 
     public function testMiddlewareFunctionalityWithXFrameOptionsHeader()
@@ -42,10 +42,25 @@ class XFrameOptionsTest extends \PHPUnit_Framework_TestCase
         $response = $response->withAddedHeader(XFrameOptions::X_FRAME_OPTIONS, 'abc');
 
         /** @var Response $response */
-        $response = $middleware($request, $response, function($request, $response){
+        $response = $middleware($request, $response, function ($request, $response) {
             return $response;
         });
 
-        $this->assertEquals($response->getHeader(XFrameOptions::X_FRAME_OPTIONS)[0], 'abc');
+        $this->assertSame(['abc'], $response->getHeader(XFrameOptions::X_FRAME_OPTIONS));
+    }
+
+
+    public function testMiddlewareFunctionalityNewResponse()
+    {
+        $middleware = new XFrameOptions();
+        $request = ServerRequestFactory::fromGlobals();
+        $response = new Response();
+
+        /** @var Response $response */
+        $response = $middleware($request, $response, function ($request, $response) {
+            return new Response();
+        });
+
+        $this->assertSame([XFrameOptions::SAMEORIGIN], $response->getHeader(XFrameOptions::X_FRAME_OPTIONS));
     }
 }
