@@ -27,7 +27,7 @@ class XFrameOptionsTest extends \PHPUnit_Framework_TestCase
         $response = new Response();
 
         /** @var Response $response */
-        $response = $middleware($request, $response, function($request, $response){
+        $response = $middleware($request, $response, function ($request, $response) {
             return $response;
         });
 
@@ -42,10 +42,25 @@ class XFrameOptionsTest extends \PHPUnit_Framework_TestCase
         $response = $response->withAddedHeader(XFrameOptions::X_FRAME_OPTIONS, 'abc');
 
         /** @var Response $response */
-        $response = $middleware($request, $response, function($request, $response){
+        $response = $middleware($request, $response, function ($request, $response) {
             return $response;
         });
 
         $this->assertSame(['abc'], $response->getHeader(XFrameOptions::X_FRAME_OPTIONS));
+    }
+
+
+    public function testMiddlewareFunctionalityNewResponse()
+    {
+        $middleware = new XFrameOptions();
+        $request = ServerRequestFactory::fromGlobals();
+        $response = new Response();
+
+        /** @var Response $response */
+        $response = $middleware($request, $response, function ($request, $response) {
+            return new Response();
+        });
+
+        $this->assertSame([XFrameOptions::SAMEORIGIN], $response->getHeader(XFrameOptions::X_FRAME_OPTIONS));
     }
 }
