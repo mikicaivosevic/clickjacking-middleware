@@ -25,6 +25,7 @@ class XFrameOptions
 
     /**
      *  Middleware that sets the X-Frame-Options HTTP header in HTTP responses.
+     *  Does not set the header if it's already set.
      *  By default, sets the X-Frame-Options header to 'SAMEORIGIN', meaning the
      *  response can only be loaded on a frame within the same site.
      *
@@ -36,7 +37,13 @@ class XFrameOptions
      */
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, $next)
     {
-        return $next($request, $response)->withHeader(self::X_FRAME_OPTIONS, $this->getXFrameOption());
+        $response = $next($request, $response);
+
+        if ($response->hasHeader(self::X_FRAME_OPTIONS)) {
+            return $response;
+        }
+
+        return $response->withAddedHeader(self::X_FRAME_OPTIONS, $this->getXFrameOption());
     }
 
 

@@ -39,14 +39,16 @@ class XFrameOptionsTest extends \PHPUnit_Framework_TestCase
         $middleware = new XFrameOptions();
         $request = ServerRequestFactory::fromGlobals();
         $response = new Response();
+        $response = $response->withAddedHeader(XFrameOptions::X_FRAME_OPTIONS, 'abc');
 
         /** @var Response $response */
         $response = $middleware($request, $response, function ($request, $response) {
-            return $response->withHeader(XFrameOptions::X_FRAME_OPTIONS, XFrameOptions::DENY);
+            return $response;
         });
 
-        $this->assertSame([XFrameOptions::SAMEORIGIN], $response->getHeader(XFrameOptions::X_FRAME_OPTIONS));
+        $this->assertSame(['abc'], $response->getHeader(XFrameOptions::X_FRAME_OPTIONS));
     }
+
 
     public function testMiddlewareFunctionalityNewResponse()
     {
