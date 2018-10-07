@@ -2,7 +2,7 @@
     "name": "mikica/clickjacking-middleware",
     "description": "Provides clickjacking protection via the X-Frame-Options header.",
     "type": "library",
-    "keywords": ["clickjacking", "x-frame-options", "middleware"],
+    "keywords": ["clickjacking", "x-frame-options", "middleware", "psr-7"],
     "license": "BSD-3-Clause",
     "authors": [
         {
